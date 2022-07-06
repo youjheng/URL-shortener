@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 const Url = require('./models/url')
 
 const app = express()
@@ -20,6 +21,8 @@ db.once('open', () => {
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
+
+app.use(bodyParser.urlencoded({ extended: true}))
 
 app.get('/', (req, res) => {
   res.render('index')
