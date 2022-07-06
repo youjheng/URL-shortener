@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const Url = require('./models/url')
 
 const app = express()
 const PORT = 3000
