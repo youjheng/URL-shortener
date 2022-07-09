@@ -15,8 +15,7 @@ router.post('/', (req, res) => {
   let shortUrl = ''
   Url.findOne({ originalUrl: inputUrl })
     .lean()
-    .then((link) => {
-      console.log(link)
+    .then(link => {
       // check existed original Url 輸入相同網址時，產生一樣的短網址
       if (link) {
         shortUrl = `http://localhost:3000/${link.shorten}`
@@ -39,8 +38,7 @@ router.get('/:shorten', (req, res) => {
   const shorten = req.params.shorten
   Url.findOne({ shorten })
     .lean()
-    .then((link) => {
-      console.log(link)
+    .then(link => {
       if (link) return res.redirect(link.originalUrl)
     })
     .catch(error => console.log(error))
