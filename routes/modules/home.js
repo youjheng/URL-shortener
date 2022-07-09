@@ -11,26 +11,25 @@ router.get('/', (req, res) => {
 // generate short Url
 router.post('/', (req, res) => {
   const inputUrl = req.body.originalUrl
-  Url.find()
+  const shorten = generateShorten()
+  let shortUrl = ''
+  Url.findOne({ originalUrl: inputUrl })
     .lean()
-    .then((links) => {
-      let shortUrl = ''
+    .then((link) => {
+      console.log(link)
       // check existed original Url 輸入相同網址時，產生一樣的短網址
-      shortUrl = links.find(link => link.originalUrl === inputUrl)
-      if (shortUrl) {
-        shortUrl = `http://localhost:3000/${shortUrl.shorten}`
+      if (link) {
+        shortUrl = `http://localhost:3000/${link.shorten}`
         return res.render('index', { inputUrl, shortUrl })
+      } else {
+        shortUrl = `http://localhost:3000/${shorten}`
+        // create new short Url
+        return Url.create({
+          originalUrl: inputUrl,
+          shorten: shorten,
+        })
+          .then(() => res.render('index', { inputUrl, shortUrl }))
       }
-      const shorten = generateShorten()
-      // check existed shorten
-      while (links.some(link => link.shorten === shorten)) return shorten
-      shortUrl = `http://localhost:3000/${shorten}`
-      // create new short Url
-      return Url.create({
-        originalUrl: inputUrl,
-        shorten: shorten,
-      })
-        .then(() => res.render('index', { inputUrl, shortUrl }))
     })
     .catch(error => console.log(error))
 })
@@ -41,6 +40,7 @@ router.get('/:shorten', (req, res) => {
   Url.findOne({ shorten })
     .lean()
     .then((link) => {
+      console.log(link)
       if (link) return res.redirect(link.originalUrl)
     })
     .catch(error => console.log(error))
