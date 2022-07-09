@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const Url = require('../../models/url')
 const generateShorten = require('../../generateShorten')
-let shortUrl = ''
 
 // home page
 router.get('/', (req, res) => {
@@ -15,19 +14,17 @@ router.post('/', (req, res) => {
   Url.find()
     .lean()
     .then((links) => {
+      let shortUrl = ''
       // check existed original Url 輸入相同網址時，產生一樣的短網址
       shortUrl = links.find(link => link.originalUrl === inputUrl)
       if (shortUrl) {
         shortUrl = `http://localhost:3000/${shortUrl.shorten}`
         return res.render('index', { inputUrl, shortUrl })
       }
-
-      let shorten = generateShorten()
-      shortUrl = `http://localhost:3000/${shorten}`
+      const shorten = generateShorten()
       // check existed shorten
-      while (links.some(link => link.shorten === shorten)) {
-        shorten = generateShorten()
-      }
+      while (links.some(link => link.shorten === shorten)) return shorten
+      shortUrl = `http://localhost:3000/${shorten}`
       // create new short Url
       return Url.create({
         originalUrl: inputUrl,
