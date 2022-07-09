@@ -56,6 +56,18 @@ app.post('/', (req, res) => {
     .catch(error => console.log(error))
 })
 
+app.get('/:shorten', (req,res) => {
+  const shorten = req.params.shorten
+  Url.findOne({ shorten })
+    .lean()
+    .then((link) => {
+      if (link) {
+        return res.redirect(link.originalUrl)
+      }
+    })
+    .catch(error => console.log(error))
+})
+
 app.listen(PORT, () => {
   console.log(`App is running on http://localhost:${PORT}`)
 })
