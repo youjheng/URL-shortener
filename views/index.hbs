@@ -1,6 +1,7 @@
 <div class="row container d-flex justify-content-center mx-auto w-80">
   <form action="/" method="POST">
     <div class="row m-3">
+      {{!-- 如果使用者沒有輸入內容，就點擊送出按鈕，會防止表單送出並提示使用者 --}}
       <input type="url" name="originalUrl" class="form-control" value="{{inputUrl}}" placeholder="Input URL here" required>
     </div>
     <div class="text-center mb-5">

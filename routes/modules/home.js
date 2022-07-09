@@ -7,15 +7,18 @@ const PORT = 3000
 const mainUrl = `http://localhost:${PORT}/`
 let shortUrl = ''
 
+// home page
 router.get('/', (req, res) => {
   res.render('index')
 })
 
+// generate short Url
 router.post('/', (req, res) => {
   const inputUrl = req.body.originalUrl
   Url.find()
     .lean()
     .then((links) => {
+      // check existed original Url 輸入相同網址時，產生一樣的短網址
       shortUrl = links.find((link) => link.originalUrl === inputUrl)
       if (shortUrl) {
         shortUrl = mainUrl + shortUrl.shorten
@@ -24,9 +27,11 @@ router.post('/', (req, res) => {
 
       let shorten = generateShorten()
       shortUrl = mainUrl + shorten
+      // check existed shorten
       while (links.some(link => link.shorten === shorten)) {
         shorten = generateShorten()
       }
+      // create new short Url
       return Url.create({
         originalUrl: inputUrl,
         shorten: shorten,
@@ -36,6 +41,7 @@ router.post('/', (req, res) => {
     .catch(error => console.log(error))
 })
 
+// redirect to original Url
 router.get('/:shorten', (req, res) => {
   const shorten = req.params.shorten
   Url.findOne({ shorten })
