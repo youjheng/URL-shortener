@@ -2,13 +2,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
-const Url = require('./models/url')
-const generateShorten = require('./generateShorten')
+const routes = require('./routes')
 
 const app = express()
 const PORT = 3000
-const mainUrl = `http://localhost:${PORT}/`
-let shortUrl = ''
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -27,46 +24,7 @@ app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-  res.render('index')
-})
-
-app.post('/', (req, res) => {
-  const inputUrl = req.body.originalUrl
-  Url.find()
-    .lean()
-    .then((links) => {
-      shortUrl = links.find((link) => link.originalUrl === inputUrl)
-      if (shortUrl) {
-        shortUrl = mainUrl + shortUrl.shorten
-        return res.render('index', { inputUrl, shortUrl })
-      } 
-
-      let shorten = generateShorten()
-      shortUrl = mainUrl + shorten
-      while (links.some(link => link.shorten === shorten)) {
-        shorten = generateShorten()
-      }
-      return Url.create({
-        originalUrl: inputUrl,
-        shorten: shorten,
-      })
-        .then(() => res.render('index', { inputUrl, shortUrl }))
-    })
-    .catch(error => console.log(error))
-})
-
-app.get('/:shorten', (req,res) => {
-  const shorten = req.params.shorten
-  Url.findOne({ shorten })
-    .lean()
-    .then((link) => {
-      if (link) {
-        return res.redirect(link.originalUrl)
-      }
-    })
-    .catch(error => console.log(error))
-})
+app.use(routes)
 
 app.listen(PORT, () => {
   console.log(`App is running on http://localhost:${PORT}`)
