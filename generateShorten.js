@@ -5,12 +5,12 @@ const collection = lowerCaseLetters + upperCaseLetters + numbers
 
 const randomSelector = arr => arr[Math.floor(Math.random() * arr.length)]
 
-function generateShortUrl() {
-  let shortUrl = ''
+function generateShorten() {
+  let shorten = ''
   for (let i = 0; i < 5; i++) {
-    shortUrl += randomSelector(collection)
+    shorten += randomSelector(collection)
   }
-  return shortUrl
+  return shorten
 }
 
-module.exports = generateShortUrl
+module.exports = generateShorten

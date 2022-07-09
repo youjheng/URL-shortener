@@ -1,10 +1,18 @@
 <div class="row container align-items-center">
   <form action="/" method="POST">
     <div class="row mb-3">
-      <input type="url" name="originalUrl" class="form-control" placeholder="Input URL here" required>
+      <input type="text" name="originalUrl" class="form-control" value="{{inputUrl}}" placeholder="Input URL here" required>
     </div>
     <div class="text-center">
       <button class="btn btn-outline-primary" type="submit">Shorten</button>
     </div>
+    {{#if shortUrl}}
+    <div class="row m-3">
+      <h3>Success! Please use this link:</h3>
+      <div>
+        <span>{{shortUrl}}</span>
+      </div>
+    </div>
+    {{/if}}
   </form>
 </div>
