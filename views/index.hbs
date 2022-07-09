@@ -1,16 +1,16 @@
-<div class="row container align-items-center">
+<div class="row container d-flex justify-content-center mx-auto w-80">
   <form action="/" method="POST">
-    <div class="row mb-3">
+    <div class="row m-3">
       <input type="text" name="originalUrl" class="form-control" value="{{inputUrl}}" placeholder="Input URL here" required>
     </div>
-    <div class="text-center">
+    <div class="text-center mb-5">
       <button class="btn btn-outline-primary" type="submit">Shorten</button>
     </div>
     {{#if shortUrl}}
     <div class="row m-3">
-      <h3>Success! Please use this link:</h3>
-      <div>
-        <span>{{shortUrl}}</span>
+      <p class="fs-5 fw-bold">Success! Please use this link:</p>
+      <div  class="alert alert-outline-primary" role="alert">
+        <a href="{{shortUrl}}" class="alert-link">{{shortUrl}}</a>
       </div>
     </div>
     {{/if}}
