@@ -9,9 +9,17 @@
     {{#if shortUrl}}
     <div class="row m-3">
       <p class="fs-5 fw-bold">Success! Please use this link:</p>
-      <div  class="alert alert-outline-primary" role="alert">
-        <a href="{{shortUrl}}" class="alert-link">{{shortUrl}}</a>
+      <a href="{{shortUrl}}" class="alert-link" target="_blank"><p id="shortUrl">{{shortUrl}}</p></a>
+      <div class="text-center mb-5">
+        <button class="btn btn-outline-primary" onclick="copy()">Copy</button>
       </div>
+      <script>
+        function copy() {
+          const copyUrl = document.getElementById('shortUrl').innerText
+          navigator.clipboard.writeText(copyUrl)
+            .then(() => alert(`Copied the text: ${copyUrl}`))
+        }
+      </script>
     </div>
     {{/if}}
   </form>
